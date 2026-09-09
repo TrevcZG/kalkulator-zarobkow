@@ -1,7 +1,7 @@
 :root {
     --bg-main: #0f172a;
     --card-bg: #1e293b;
-    --card-border: #334155;
+    --card-border: #38bdf8;
     --text-main: #f8fafc;
     --text-muted: #94a3b8;
     --primary: #38bdf8;
@@ -11,12 +11,15 @@
     --danger: #f87171;
     --input-bg: #0f172a;
     --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+    
+    /* Zmienna dla koloru neonu */
+    --neon-color: rgba(56, 189, 248, 0.6);
 }
 
 [data-theme="light"] {
     --bg-main: #f1f5f9;
     --card-bg: #ffffff;
-    --card-border: #e2e8f0;
+    --card-border: #0284c7;
     --text-main: #0f172a;
     --text-muted: #64748b;
     --primary: #0284c7;
@@ -26,6 +29,9 @@
     --danger: #dc2626;
     --input-bg: #f8fafc;
     --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    
+    /* Zmienna dla koloru neonu w trybie jasnym */
+    --neon-color: rgba(2, 132, 199, 0.5);
 }
 
 * {
@@ -33,7 +39,7 @@
     margin: 0;
     padding: 0;
     font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-    transition: background-color 0.25s, border-color 0.25s, color 0.25s;
+    transition: background-color 0.25s, border-color 0.25s, color 0.25s, box-shadow 0.25s;
 }
 
 body {
@@ -46,16 +52,35 @@ body {
     padding: 20px;
 }
 
+/* OKNO KALKULATORA Z NEONOWĄ ANIMACJĄ */
 .app-window {
     background-color: var(--card-bg);
-    border: 1px solid var(--card-border);
+    border: 2px solid var(--card-border);
     border-radius: 24px;
     width: 100%;
     max-width: 480px;
-    box-shadow: var(--shadow);
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    position: relative;
+    
+    /* Podstawowy neon + animacja */
+    animation: neonGlow 3s infinite alternate ease-in-out;
+}
+
+/* ANIMACJA PULSUJĄCEGO NEONU */
+@keyframes neonGlow {
+    0% {
+        box-shadow: 0 0 10px var(--neon-color),
+                    0 0 20px var(--neon-color),
+                    inset 0 0 5px var(--neon-color);
+    }
+    100% {
+        box-shadow: 0 0 20px var(--neon-color),
+                    0 0 35px var(--neon-color),
+                    0 0 50px var(--neon-color),
+                    inset 0 0 10px var(--neon-color);
+    }
 }
 
 .app-header {
