@@ -1,13 +1,14 @@
 let isNettoMode = true;
 
-// Poprawiona lista stawek na życzenie
+// Oficjalne procenty na rok 2026 (Glovo, Uber Eats, Wolt, Pyszne.pl, Bolt Food)
 const standardRates = [
+    { text: 'Osoba nigdzie nie pracująca BEZ rezygnacji z PPK (29.82%)', val: 0.2982 },
+    { text: 'Osoba nigdzie nie pracująca PO rezygnacji z PPK (27.82%)', val: 0.2782 },
+    { text: 'Osoba nigdzie nie pracująca PONIŻEJ 26 roku życia BEZ rezygnacji z PPK (21.25%)', val: 0.2125 },
+    { text: 'Osoba nigdzie nie pracująca PONIŻEJ 26 roku życia PO rezygnacji z PPK (19.25%)', val: 0.1925 },
     { text: 'Osoba pracująca (18.72%)', val: 0.1872, selected: true },
-    { text: 'Osoba pracująca <26 roku życia (19.25%)', val: 0.1925 },
-    { text: 'Osoba bez pracy (29.82%)', val: 0.2982 },
-    { text: 'Osoba bez pracy, po rezygnacji z PPK (27.82%)', val: 0.2782 },
-    { text: 'Osoba bez pracy <26 roku życia (21.25%)', val: 0.2125 },
-    { text: 'Student / Uczeń <26 roku życia (0%)', val: 0 }
+    { text: 'Osoba pracująca PONIŻEJ 26 roku życia (9%)', val: 0.09 },
+    { text: 'Student / Uczeń DO 26 roku życia (0%)', val: 0 }
 ];
 
 const stuartRates = [
