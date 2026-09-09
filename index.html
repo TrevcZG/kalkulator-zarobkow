@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Zarobków Kierowcy / Kuriera</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="app-window">
+    <header class="app-header">
+        <div class="logo">
+            <span class="logo-icon">⚡</span>
+            <h2>Kalkulator Zarobków</h2>
+        </div>
+        <button id="themeToggle" class="icon-btn" title="Zmień motyw">
+            <span class="theme-icon">🌙</span>
+        </button>
+    </header>
+
+    <nav class="nav-tabs">
+        <button class="nav-btn active" data-tab="calculator">🧮 Kalkulator</button>
+        <button class="nav-btn" data-tab="history">📜 Zapisane (<span id="historyCount">0</span>)</button>
+        <button class="nav-btn" data-tab="guide">📖 Jak to działa?</button>
+    </nav>
+
+    <main class="tab-content">
+        <!-- ZAKŁADKA 1: KALKULATOR -->
+        <section id="tab-calculator" class="tab-pane active">
+            <form id="calcForm" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="appType">Aplikacja / Platforma</label>
+                    <select id="appType">
+                        <option value="standard" selected>Glovo, Uber, Wolt, Pyszne.pl, Bolt Food</option>
+                        <option value="stuart">Stuart</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Status / Umowa</label>
+                    <select id="status"></select>
+                </div>
+
+                <div class="mode-switch">
+                    <button type="button" class="mode-btn active" id="btnNetto">NETTO (bez VAT)</button>
+                    <button type="button" class="mode-btn" id="btnBrutto">BRUTTO (z VAT 23%)</button>
+                </div>
+
+                <div class="form-group">
+                    <label for="incomeInput">
+                        <span id="incomeLabelText">Przychód Netto (bez VAT)</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="number" id="incomeInput" placeholder="0.00" step="0.01">
+                        <span class="unit">zł</span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="partner">Prowizja partnera</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="partner" placeholder="0.00" step="0.01">
+                            <span class="unit">zł</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cash">Pobrana gotówka</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="cash" placeholder="0.00" step="0.01">
+                            <span class="unit">zł</span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="results-card">
+                <div class="card-header">
+                    <h3>Podsumowanie Wypłaty</h3>
+                </div>
+
+                <div class="result-row">
+                    <span>Podstawa rozliczenia (Netto):</span>
+                    <strong id="totalNetto">0.00 zł</strong>
+                </div>
+                <div class="result-row">
+                    <span>Podatek / Składki ZUS:</span>
+                    <strong id="zusTax" class="text-danger">-0.00 zł</strong>
+                </div>
+                <div class="result-row">
+                    <span>Prowizja partnera:</span>
+                    <strong id="partnerFee" class="text-danger">-0.00 zł</strong>
+                </div>
+                <div class="result-row">
+                    <span>Pobrana gotówka (potrącenie):</span>
+                    <strong id="cashDeduction" class="text-danger">-0.00 zł</strong>
+                </div>
+
+                <div class="result-box highlight-bank">
+                    <span>Przelew na konto:</span>
+                    <strong id="bankTransfer">0.00 zł</strong>
+                </div>
+
+                <div class="result-box highlight-total">
+                    <div>
+                        <span>Twój Całkowity Zysk</span>
+                        <small>(Przelew na konto + Gotówka w ręku)</small>
+                    </div>
+                    <strong id="totalProfit">0.00 zł</strong>
+                </div>
+
+                <div class="action-buttons">
+                    <button type="button" class="btn btn-secondary" id="detailedCalcBtn">Szczegóły wyliczeń</button>
+                    <button type="button" class="btn btn-primary" id="saveCalcBtn">💾 Zapisz wynik</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ZAKŁADKA 2: HISTORIA -->
+        <section id="tab-history" class="tab-pane">
+            <div class="history-header">
+                <h3>Zapisane Obliczenia</h3>
+                <button id="clearHistoryBtn" class="btn btn-danger-link">Clear wszystko</button>
+            </div>
+            <div id="historyList" class="history-list">
+                <!-- Elementy generowane dynamicznie -->
+            </div>
+        </section>
+
+        <!-- ZAKŁADKA 3: JAK TO DZIAŁA -->
+        <section id="tab-guide" class="tab-pane">
+            <article class="guide-content">
+                <h3>Jak działa kalkulator?</h3>
+                <p>Kalkulator służy do precyzyjnego wyliczania Twoich faktycznych zarobków na czysto podczas pracy przez partnera rozliczeniowego.</p>
+
+                <h4>1. Podstawa opodatkowania (Netto)</h4>
+                <p>Aplikacje rozliczeniowe naliczają podatki oraz składki ZUS od **kwoty netto** Twojego przychodu. Jeśli wpisujesz kwotę Brutto (z VAT 23%), kalkulator przelicza ją najpierw na kwotę Netto według wzoru:</p>
+                <code>Netto = Brutto / 1.23</code>
+
+                <h4>2. Składki ZUS i Podatek</h4>
+                <p>W zależności od Twojego statusu (np. uczeń, osoba pracująca w innej firmie), pobierany jest odpowiedni procent od kwoty Netto. Wybrana stawka procentowa odejmowana jest w całości od Twojego przychodu.</p>
+
+                <h4>3. Rozliczenie gotówki</h4>
+                <p>Pobrana gotówka od klienta pozostaje fizycznie w Twojej kieszeni. Partner rozliczeniowy potrąca jej dokładną wartość z Twojego przelewu końcowego. Dlatego Twój całkowity zysk to zawsze:</p>
+                <code>Łączny Zysk = Przelew z aplikacji + Pobrana gotówka w ręku</code>
+
+                <h4>4. Prowizja Partnera</h4>
+                <p>Stała opłata pobierana przez partnera za rozliczenie danego tygodnia/miesiąca.</p>
+            </article>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        Made By Trevcio • Dexterawka • With help from Frost
+    </footer>
+</div>
+
+<!-- MODAL SZCZEGÓŁÓW -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 id="modalTitle">Szczegóły Obliczeń</h3>
+            <button class="close-btn" id="modalClose">&times;</button>
+        </div>
+        <div class="modal-body" id="modalText"></div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
